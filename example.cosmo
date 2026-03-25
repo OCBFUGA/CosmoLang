@@ -1,0 +1,25 @@
+// -----------------------------------------------------
+// CÓDIGO FONTE COSMOCORE (LINGUAGEM .COSMO)
+// Repositório Oficial - CosmoLang
+// -----------------------------------------------------
+
+engine CosmoCore V25.0;
+
+// 1. DEFINIÇÃO DOS NÓS DE INTELIGÊNCIA
+node sniper  = "qwen-7b";
+node auditor = "qwen-7b-instruct";
+node goliath = "internlm2-20b";
+
+// 2. ORÁCULOS SOBERANOS
+oracle JanioPascal {
+    domain    = "COMBINATORICS";
+    keywords  = "pascal, row, every, mod";
+    formula   = "(2**(n-1+p) - 2**((n-1)%p)) // (2**p - 1)";
+}
+
+// 3. PIPELINE DE INFERÊNCIA
+pipeline AIMO {
+    strategy = lazy_consensus(sniper, auditor);
+    failsafe = [0, 1, 121, 999, 1000];
+    fallback = escalate(goliath);
+}
