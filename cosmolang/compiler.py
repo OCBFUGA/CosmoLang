@@ -2,6 +2,13 @@ import re, time
 import os
 import sqlite3
 import datetime
+import json
+
+try:
+    import requests
+    HAS_REQUESTS = True
+except ImportError:
+    HAS_REQUESTS = False
 
 class CosmoVM:
     def __init__(self):
@@ -146,12 +153,48 @@ class CosmoVM:
                         print(f"      ✅ -> Registro Real Salvo com Sucesso no SQLite!")
                     except Exception as e:
                         print(f"      ❌ -> Falha de Gravação no Banco: {e}")
-                elif "whatsapp" in action_command.lower():
-                    wpp_target = self.integrations.get('whatsapp', 'Conector_Desconhecido')
-                    print(f"   📲 [{action_name.upper()}] Mensagem despachada usando API HTTP: {wpp_target}")
-                    print(f"      ✅ -> Payload POST disparado: {{'to': 'CLIENTE', 'body': '{ans}'}}")
-                    time.sleep(0.5)
+                elif "whatsapp" in action_command.lower() or "webhook" in action_command.lower() or "http" in action_command.lower():
+                    wpp_target = self.integrations.get('whatsapp', self.integrations.get('webhook', ''))
+                    print(f"   📲 [{action_name.upper()}] Disparando Webhook HTTP Real: {wpp_target}")
+                    
+                    payload = {
+                        "source": "CosmoLang_V25.1",
+                        "timestamp": datetime.datetime.now().isoformat(),
+                        "trigger": pipe.get('trigger', 'unknown'),
+                        "input_message": input_data,
+                        "decision": str(ans),
+                        "oracle_activated": True
+                    }
+                    
+                    if HAS_REQUESTS and wpp_target.startswith("http"):
+                        try:
+                            resp = requests.post(wpp_target, json=payload, timeout=10)
+                            print(f"      ✅ -> HTTP {resp.status_code} | Resposta: {resp.text[:200]}")
+                        except requests.exceptions.ConnectionError:
+                            print(f"      ⚠️ -> Servidor offline. Payload salvo localmente para retry.")
+                            self._save_failed_webhook(payload)
+                        except Exception as e:
+                            print(f"      ❌ -> Erro no POST: {e}")
+                            self._save_failed_webhook(payload)
+                    else:
+                        print(f"      📋 -> Payload gerado (modo offline): {json.dumps(payload, ensure_ascii=False)}")
+                    time.sleep(0.3)
                 else:
                     print(f"   ⚡ [{action_name.upper()}] Ação genérica executada: {action_command}")
             
             print(f"\n✨ [WORKFLOW ENTERPRISE CONCLUÍDO COM SUCESSO]")
+
+    def _save_failed_webhook(self, payload):
+        """Salva webhooks que falharam para retry posterior."""
+        failed_file = "cosmo_failed_webhooks.json"
+        failed_list = []
+        if os.path.exists(failed_file):
+            try:
+                with open(failed_file, "r", encoding="utf-8") as f:
+                    failed_list = json.load(f)
+            except Exception:
+                pass
+        failed_list.append(payload)
+        with open(failed_file, "w", encoding="utf-8") as f:
+            json.dump(failed_list, f, ensure_ascii=False, indent=2)
+        print(f"      💾 -> Webhook salvo em '{failed_file}' para reenvio futuro.")
