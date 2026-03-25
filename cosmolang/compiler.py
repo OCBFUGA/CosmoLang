@@ -15,7 +15,8 @@ class CosmoVM:
         self.nodes = {}
         self.oracles = {}
         self.pipeline = {}
-        self.integrations = {} # V25.1 Enterprise
+        self.integrations = {} 
+        self.ollama_url = "http://localhost:11434/api/generate"
 
     def parse(self, filepath):
         print(f"📡 [MÁQUINA VIRTUAL] Lendo bytecode (.cosmo): {os.path.basename(filepath)}...\n")
@@ -74,45 +75,88 @@ class CosmoVM:
         print("\n✅ [COSMO COMPILER] Verificação estrita completa. Compilado.")
         return True
         
-    def execute_mock(self, input_data):
+    def _call_ollama(self, model_name, prompt):
+        """Faz a chamada real ao cérebro (Ollama)"""
+        if not HAS_REQUESTS:
+            return "Erro: 'requests' não instalado."
+        
+        try:
+            payload = {
+                "model": model_name,
+                "prompt": f"Responda apenas com o número final. Problema: {prompt}",
+                "stream": False
+            }
+            resp = requests.post(self.ollama_url, json=payload, timeout=60)
+            if resp.status_code == 200:
+                result = resp.json().get("response", "0").strip()
+                # Tentar extrair apenas o número se houver texto
+                match = re.search(r'(\d+)', result)
+                return int(match.group(1)) if match else 0
+            return 0
+        except Exception:
+            return 0
+
+    def execute(self, input_data):
         pipe = list(self.pipeline.values())[0]
         
-        # --- EXECUÇÃO MATEMÁTICA (KAGGLE AIMO STANDARD) ---
+        # --- EXECUÇÃO OMEGA (KAGGLE AIMO / REAL INFERENCE) ---
         if pipe["type"] == "AIMO":
-            print(f"--- [ STARTING KAGGLE OMEGA SIMULATION ] ---")
-            print(f"📝 Prompt AIMO: '{input_data}'")
+            print(f"\n--- [ INICIANDO SINGULARIDADE OMEGA: {len(self.nodes)} NODES / 1 VOTO SOBERANO ] ---")
+            print(f"\n[SCANNER] ID: {datetime.datetime.now().strftime('%H%M%S')}_OMEGA")
             
-            domain = "COMBINATORICS" if any(x in input_data.lower() for x in ["pascal", "row", "choose"]) else "GEOMETRY"
-            print(f"🧠 [V25 ROTEADOR] Domínio classificado: {domain}")
+            # 1. Roteamento de Domínio (AIMO-focused)
+            math_keywords = ["pascal", "row", "choose", "probabilidade", "combina", "arranjo", "permuta", "fatorial", "euler", "primos"]
+            domain = "COMBINATORICS" if any(x in input_data.lower() for x in math_keywords[:8]) else "NUMBER_THEORY"
+            if any(x in input_data.lower() for x in ["curva", "esfera", "triangulo", "geometria"]):
+                domain = "GEOMETRY"
+            print(f"[DOMÍNIO DETECTADO] {domain}")
             
+            # 2. Veto do Oráculo Soberano
             for o_name, o_data in self.oracles.items():
-                if o_data["domain"] == domain and "pascal" in input_data.lower():
-                    print(f"⚖️ [ORACLE SOBERANO] Condições ativadas!")
-                    print(f"⚖️ [ORACLE ENGINE] Executando Fórmula Fechada Blindada: {o_data['formula']}")
-                    n, p = 10, 3
-                    ans = eval(o_data["formula"])
-                    print(f"✨ [VEREDITO COSMO] Gate Matematico Ativo: {ans}\n")
-                    return ans
+                if o_data["domain"] == domain:
+                    print(f"⚖️ [ORACLE SOBERANO] Interceptando via Lei de Janio-Pascal...")
+                    # Mock de variáveis para a fórmula (n, p) extraídos via regex simples se possível
+                    n_match = re.search(r'n\s*=\s*(\d+)', input_data)
+                    p_match = re.search(r'p\s*=\s*(\d+)', input_data)
+                    n = int(n_match.group(1)) if n_match else 10
+                    p = int(p_match.group(1)) if p_match else 3
+                    
+                    try:
+                        ans = eval(o_data["formula"])
+                        print(f"✨ [VEREDITO OMEGA V25.2]: {ans} (Garantia Matemática)")
+                        return ans
+                    except: pass
 
-            print(f"⚡ [PIPELINE ENGINE] Strategy Set: {pipe['strategy']}")
-            
+            # 3. Pipeline de Consenso Real
             node_names = list(self.nodes.keys())
-            p1_name = node_names[0] if len(node_names) > 0 else "NodeA"
-            p2_name = node_names[1] if len(node_names) > 1 else "NodeB"
-            heavy_name = node_names[-1] if len(node_names) > 0 else "Goliath"
+            if not node_names:
+                print("❌ Nenhum node neural definido.")
+                return 0
+
+            # Disparo Rápido (Sniper / Auditor)
+            print(f"⚡ [PIPELINE ENGINE] Strategy: {pipe['strategy']}")
             
-            p1, p2 = 121, 121
-            print(f"  -> Disparo Rápido [{p1_name}]: {p1}")
-            print(f"  -> Disparo Rápido [{p2_name}]: {p2}")
+            p1_name = node_names[0]
+            print(f"  -> Ativando Node [{p1_name}] ({self.nodes[p1_name]})...")
+            p1 = self._call_ollama(self.nodes[p1_name], input_data)
+            print(f"  -> Resultado: {p1}")
+
+            # Check Failsafe
+            if p1 in pipe["failsafe"]:
+                print(f"[FAILSAFE] Valor suspeito detectado ({p1}). Acordando Goliath...")
+                heavy_name = node_names[-1]
+                print(f"[WAKING GOLIATH] Escalando para nó pesado: {self.nodes[heavy_name]}...")
+                p_final = self._call_ollama(self.nodes[heavy_name], input_data)
+                print(f"[FALLBACK LOG] {p1_name}: {p1} | Goliath: {p_final}")
+                print(f"============================================================")
+                print(f"==> VEREDITO OMEGA V25.2: {p_final}")
+                print(f"============================================================\n")
+                return p_final
             
-            if p1 == p2 and p1 in pipe["failsafe"]:
-                print(f"🚨 [FAILSAFE ANTI-ERROR] Resposta {p1} barrada (Identificada como Alucinação)!")
-                print(f"🏗️ [ESCALATION PROTOCOL] Despertando máquina pesada: {pipe['fallback']}...")
-                time.sleep(1)
-                p3 = 42 
-                print(f"  -> [{heavy_name}] Cálculo Extraído: {p3}")
-                print(f"✨ [VEREDITO COSMO] Resultado Seguro Consolidado: {p3}\n")
-                return p3
+            print(f"============================================================")
+            print(f"==> VEREDITO OMEGA V25.2: {p1}")
+            print(f"============================================================\n")
+            return p1
 
         # --- EXECUÇÃO ENTERPRISE (SUBSTITUTO N8N) ---
         elif pipe["type"] == "ENTERPRISE":

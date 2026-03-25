@@ -1,0 +1,20 @@
+engine CosmoCore AIMO V25.2;
+
+// NODES NEURAIS REAIS (Ollama Local)
+node sniper  = "qwen2.5:0.5b";
+node auditor = "qwen2.5:0.5b";
+node goliath = "qwen2.5:0.5b"; // Para o teste usaremos o mesmo, no Kaggle sera 20B+
+
+// ORÁCULO SOBERANO (Janio-Pascal)
+oracle PascalGate {
+    domain   = "COMBINATORICS";
+    keywords = "pascal, combinatoria, n=, p=";
+    formula  = "int(__import__('math').comb(n, p))";
+}
+
+// PIPELINE DE SINGULARIDADE OMEGA
+pipeline OlimpiadaAIMO {
+    strategy = "Consenso Triplo com Failsafe";
+    failsafe = [121, 999, 1000]; // Valores que disparam o Goliath
+    fallback = goliath;
+}

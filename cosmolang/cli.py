@@ -12,7 +12,7 @@ def main():
     sys.stdout.reconfigure(encoding='utf-8')
 
     if args.command == "version":
-        print("🚀 CosmoCore Engine V25.0 - Janio-Pascal Edition")
+        print("🚀 CosmoCore Engine V25.2 - Singularidade Omega Edition")
         sys.exit(0)
 
     if args.command in ["run", "build"]:
@@ -26,7 +26,7 @@ def main():
         if success and args.test:
             print("\n" + "-"*60)
             print("🎯 [TESTE LOCAL AIMO INICIADO]")
-            vm.execute_mock(args.test)
+            vm.execute(args.test)
             print("-" * 60)
         elif success and args.command == "run":
             print("\n[AVISO] Compilação finalizada com sucesso. O bytecode está pronto para a Cloud.")
