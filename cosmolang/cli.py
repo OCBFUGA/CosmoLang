@@ -12,7 +12,7 @@ def main():
     sys.stdout.reconfigure(encoding='utf-8')
 
     if args.command == "version":
-        print("🚀 CosmoCore Engine V25.2 - Singularidade Omega Edition")
+        print("🚀 CosmoCore Engine V26.0 - Sovereign SaaS Edition")
         sys.exit(0)
 
     if args.command in ["run", "build"]:

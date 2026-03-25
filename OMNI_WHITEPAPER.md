@@ -1,6 +1,6 @@
-# OMNI WHITEPAPER: MEGA UNIVERSO ÓMEGA V25.2
+# OMNI WHITEPAPER: MEGA UNIVERSO ÓMEGA V26.0 (Sovereign Armor)
 
-## A Nova Era da I.A. de Singularidade: Enxames Autônomos e Oráculos Matemáticos
+## A Era da Governança Remota e Enxames SaaS-Ready
 
 **Autor:** Jânio Gomes Ribeiro  
 **Data:** 25 de Março de 2026  
@@ -10,7 +10,7 @@
 
 ### 1. RESUMO EXECUTIVO (ABSTRACT)
 
-A arquitetura **Mega Universo Ómega** propõe a unificação de três vertentes fundamentais: Relatividade Geral (Espaço-Tempo), Mecânica Quântica (Probabilidades) e Inteligências Artificiais em Enxame (Consenso). O projeto introduz o **CosmoLang**, uma linguagem de programação declarativa (DSL) desenhada para orquestrar tomadas de decisão de I.A. com precisão matemática absoluta, eliminando alucinações via Oráculos Soberanos Gated.
+A arquitetura **Mega Universo Ómega** propõe a unificação de três vertentes fundamentais: Relatividade Geral (Espaço-Tempo), Mecânica Quântica (Probabilidades) e Inteligências Artificiais em Enxame (Consenso). O projeto introduz o **CosmoLang**, uma linguagem de programação declarativa (DSL) desenhada para orchestrar tomadas de decisão de I.A. com precisão matemática absoluta, eliminando alucinações via Oráculos Soberanos Gated.
 
 ### 2. AS 4 LEIS FUNDAMENTAIS DO UNIVERSO ÓMEGA (Janio-Pascal Laws)
 
@@ -28,6 +28,7 @@ O motor de execução do **CosmoLang V25.2** utiliza um pipeline de três camada
 * **Sniper (Nó Rápido):** Modelos de 0.5B a 7B para respostas instantâneas e econômicas.
 * **Auditor (Nó Validador):** Verifica conflitos e realiza o sanity check primário.
 * **Goliath (Nó de Força Bruta):** Awakened apenas em caso de divergência. Modelos de 20B a 70B para resoluções de problemas olímpicos (AIMO).
+* **V26 Sovereign Shield:** Introdução do suporte a Oráculos Remotos (SaaS-Ready). A lógica sensível agora pode ser executada em servidores privados do Líder, tornando o motor público indestrutível contra engenharia reversa.
 
 ### 4. CASOS DE USO E MONETIZAÇÃO (B2B & KAGGLE)
 

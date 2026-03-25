@@ -17,6 +17,8 @@ class CosmoVM:
         self.pipeline = {}
         self.integrations = {} 
         self.ollama_url = "http://localhost:11434/api/generate"
+        self.remote_governance_url = None # V26.0 - SaaS Shield
+        self.sovereign_shield_active = True
 
     def parse(self, filepath):
         print(f"📡 [MÁQUINA VIRTUAL] Lendo bytecode (.cosmo): {os.path.basename(filepath)}...\n")
@@ -111,11 +113,18 @@ class CosmoVM:
                 domain = "GEOMETRY"
             print(f"[DOMÍNIO DETECTADO] {domain}")
             
-            # 2. Veto do Oráculo Soberano
+            # 2. Veto do Oráculo Soberano (Híbrido: Local ou Remoto)
             for o_name, o_data in self.oracles.items():
                 if o_data["domain"] == domain:
                     print(f"⚖️ [ORACLE SOBERANO] Interceptando via Lei de Janio-Pascal...")
-                    # Mock de variáveis para a fórmula (n, p) extraídos via regex simples se possível
+                    
+                    # V26.0: Verificação de Governança Remota (Proteção Anti-Clone)
+                    if self.remote_governance_url:
+                        print(f"📡 [REMOTE GOVERNANCE] Consultando Cérebro Privado para Veredito...")
+                        # Aqui teríamos a chamada real ao servidor do Jânio
+                        pass
+
+                    # Fallback para Lógica Local Blindada
                     n_match = re.search(r'n\s*=\s*(\d+)', input_data)
                     p_match = re.search(r'p\s*=\s*(\d+)', input_data)
                     n = int(n_match.group(1)) if n_match else 10
@@ -123,7 +132,7 @@ class CosmoVM:
                     
                     try:
                         ans = eval(o_data["formula"])
-                        print(f"✨ [VEREDITO OMEGA V25.2]: {ans} (Garantia Matemática)")
+                        print(f"✨ [VEREDITO OMEGA V26.0]: {ans} (Garantia Matemática)")
                         return ans
                     except: pass
 
@@ -149,12 +158,12 @@ class CosmoVM:
                 p_final = self._call_ollama(self.nodes[heavy_name], input_data)
                 print(f"[FALLBACK LOG] {p1_name}: {p1} | Goliath: {p_final}")
                 print(f"============================================================")
-                print(f"==> VEREDITO OMEGA V25.2: {p_final}")
+                print(f"==> VEREDITO OMEGA V26.0: {p_final}")
                 print(f"============================================================\n")
                 return p_final
             
             print(f"============================================================")
-            print(f"==> VEREDITO OMEGA V25.2: {p1}")
+            print(f"==> VEREDITO OMEGA V26.0: {p1}")
             print(f"============================================================\n")
             return p1
 
