@@ -2,10 +2,10 @@ from setuptools import setup, find_packages
 
 setup(
     name="cosmocore-lang",
-    version="26.0.0",
+    version="27.0.0",
     author="Janio Gomes Ribeiro",
     author_email="janio@example.com",
-    description="CosmoCore AGI Swarm Language & Compiler (V25)",
+    description="CosmoCore AGI Swarm Language & Compiler (V27 - Cloud & Tool Calling Edition)",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     packages=find_packages(),

@@ -1,0 +1,37 @@
+// -------------------------------------------------------------
+// CosmoLang v27.0: Exemplo de Multi-Provider Nuvem e Tool-Calling
+// -------------------------------------------------------------
+
+engine CosmoCore V27.0;
+
+// 1. Modelos Híbridos (Local + Nuvem)
+node fast_sniper   = "gemini/gemini-2.5-flash";
+node heavy_goliath = "openai/gpt-4o";
+
+// 2. Declaração de Ferramentas (Tool Calling)
+tool calculadora_alta_precisao {
+    description = "Calcula expressões matemáticas com rigor exato";
+    runtime     = "python";
+    exec        = "math_eval(expr)";
+}
+
+tool consulta_cambio {
+    description = "Consulta taxa de câmbio USD em tempo real";
+    runtime     = "http";
+    url         = "https://api.exchangerate-api.com/v4/latest/USD";
+}
+
+// 3. Oráculo Determinístico
+oracle JanioPascal {
+    domain   = "COMBINATORICS";
+    keywords = "pascal, row, combinatoria";
+    formula  = "math.comb(n, p)";
+}
+
+// 4. Pipeline com Chamada de Ferramentas e Fallback
+pipeline AgenteHibridoCloud {
+    strategy = lazy_consensus(fast_sniper);
+    tools    = [calculadora_alta_precisao, consulta_cambio];
+    failsafe = [999, 0];
+    fallback = escalate(heavy_goliath);
+}
