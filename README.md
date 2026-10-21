@@ -6,8 +6,8 @@
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-brightgreen.svg)](https://python.org)
 
 **Author:** Janio Gomes Ribeiro & The CosmoCore Research Collective  
-**Version:** 27.0 (Sovereign Induction & Multi-Tier Consensus)  
-**Competition Tracks:** [ARC Prize 2026 - Paper Track](https://www.kaggle.com/competitions/arc-prize-2026-paper-track) | [ARC-AGI-3](https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3) | [ARC-AGI-2](https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-2)  
+**Version:** 35.0 (Discrete Topology, Kinematic Odometry, Victory Replay & Semantic SceneGraph)  
+**Competition Tracks:** [ARC Prize 2026 - Paper Track](https://www.kaggle.com/competitions/arc-prize-2026-paper-track) | [Read Paper Writeup](ARC_Prize_2026_Paper_Track_Writeup.md) | [ARC-AGI-3](https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3) | [ARC-AGI-2](https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-2)  
 
 ---
 
