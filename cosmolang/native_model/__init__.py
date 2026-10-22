@@ -8,6 +8,7 @@ from cosmolang.native_model.tokenizer import CosmoTokenizer
 from cosmolang.native_model.verifier import CosmoVerifier, VerificationResult
 from cosmolang.native_model.synthesizer import CosmoSynthesizer, SynthesisResult
 from cosmolang.native_model.export_dataset import export_synthetic_dataset
+from cosmolang.native_model.logic_priors import ARCLogicPriors
 
 __all__ = [
     "CosmoGrammar",
@@ -20,4 +21,5 @@ __all__ = [
     "CosmoSynthesizer",
     "SynthesisResult",
     "export_synthetic_dataset",
+    "ARCLogicPriors",
 ]
