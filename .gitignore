@@ -38,3 +38,7 @@ venv.bak/
 # IDEs
 .vscode/
 .idea/
+
+# Datasets
+*.jsonl
+*.parquet
