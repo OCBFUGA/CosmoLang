@@ -38,7 +38,10 @@ class CosmoTokenizer:
             f"{cls.format_task_to_prompt(task)}\n\n"
             "Respond with the minimal CosmoLang program:"
         )
-        assistant_content = f"cosmolang: {task['program']}"
+        prog = task['program']
+        if not prog.startswith("cosmolang:"):
+            prog = f"cosmolang: {prog}"
+        assistant_content = prog
         
         return {
             "messages": [
@@ -54,7 +57,10 @@ class CosmoTokenizer:
     def to_alpaca_example(cls, task: Dict[str, Any]) -> Dict[str, Any]:
         instruction = "Synthesize the minimal CosmoLang program for the given spatial demonstrations."
         input_text = cls.format_task_to_prompt(task)
-        output_text = f"cosmolang: {task['program']}"
+        prog = task['program']
+        if not prog.startswith("cosmolang:"):
+            prog = f"cosmolang: {prog}"
+        output_text = prog
         
         return {
             "instruction": instruction,
