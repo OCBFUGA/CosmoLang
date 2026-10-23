@@ -1,9 +1,10 @@
-﻿"""
+"""
 CosmoLang Formal Grammar and AST Engine for Native Model Synthesis.
 Provides formal specification, parsing, serialization, and deterministic evaluation.
 All operations are 100% pure NumPy with zero external dependencies.
 """
 from __future__ import annotations
+from cosmolang.native_model.primitives_v2 import CosmoGrammarV2, COSMOLANG_PRIMITIVES_V2
 import ast
 import re
 from collections import deque
@@ -231,7 +232,7 @@ class CosmoProgram:
     def execute(self, grid: np.ndarray) -> np.ndarray:
         curr = grid.copy()
         for op in self.ops:
-            func = CosmoGrammar.PRIMITIVES.get(op.name)
+            func = COSMOLANG_PRIMITIVES_V2.get(op.name) or CosmoGrammar.PRIMITIVES.get(op.name)
             if func is None:
                 raise ValueError(f"Unknown CosmoLang primitive: {op.name}")
             curr = func(curr, *op.args)
@@ -242,6 +243,9 @@ class CosmoProgram:
         code_str = code_str.strip()
         if not code_str or code_str == 'identity()':
             return cls([])
+        if code_str.startswith('cosmolang:'):
+            code_str = code_str[len('cosmolang:'):].strip()
+        code_str = code_str.replace('->', '>>')
         tokens = [p.strip() for p in code_str.split('>>')]
         ops = []
         for t in tokens:
